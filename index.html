@@ -7,14 +7,12 @@
   <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="
   default-src 'self';
+  img-src 'self' data: https://*;
   script-src 'self';
-  style-src 'self';
-  img-src 'self' data:;
+  connect-src 'self' https://trello-proxy-uhya.onrender.com https://thumbnails.roblox.com;
+  style-src 'self' 'unsafe-inline';
   font-src 'self';
   object-src 'none';
-  frame-ancestors 'none';
-  base-uri 'self';
-  form-action 'self';
 ">
 
   <link rel="stylesheet" href="style.css">
