@@ -1,7 +1,3 @@
-// Replace with your Trello API Key, Token, and List ID
-const API_KEY = 'b1dc9051c1a8edb8c7333a744ee04c2a';
-const TOKEN = 'ATTA34b8804bf1865c0b0d621c5ca9ed3573024fcdc7b731f5c954982becce98a5611E0A1A3F';
-const LIST_ID = '680c0786cff8639cec1f812c';
 const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
 const avatarCache = {}; // Avatar cache
@@ -43,7 +39,7 @@ async function fetchBans() {
         loadingSpinner.style.display = 'block';
         errorMessage.textContent = '';
 
-        const response = await fetch(`https://api.trello.com/1/lists/${LIST_ID}/cards?attachments=true&key=${API_KEY}&token=${TOKEN}`);
+        const response = await fetch('https://trello-proxy-uhya.onrender.com/bans');
         const bans = await response.json();
 
         bansList.innerHTML = '';
