@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brixton RPC | Bans</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="navbar-container">
+          <a href="/" class="logo">Brixton RPC</a>
+      
+          <nav class="navbar-links" id="navbarLinks">
+            <a href="/">Home</a>
+            <a href="/bans.html">Bans</a>
+            <a href="/rules.html">Rules</a>
+            <a href="/contact.html">Contact</a>
+          </nav>
+      
+          <!-- Hamburger -->
+          <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </header>
+      
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <section class="bans-section">
+            <div class="container">
+                <h1 class="section-title">Bans</h1>
+                
+                <div class="search-container">
+                    <input type="text" id="searchBar" class="search-bar" placeholder="Search for a banned user...">
+                </div>
+
+                <div id="bansList" class="ban-cards-container">
+                    <!-- Ban Cards will load dynamically here -->
+                </div>
+
+                <div id="loadingSpinner" class="loading-spinner hidden">
+                    <i class="fas fa-spinner fa-spin"></i> Loading...
+                </div>
+
+                <div id="errorMessage" class="error-message hidden">
+                    <!-- Error messages will appear here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <p>&copy; 2025 Brixton RPC. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="bans.js"></script>
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const navbarLinks = document.getElementById('navbarLinks');
+      
+        hamburger.addEventListener('click', () => {
+          navbarLinks.classList.toggle('active');
+        });
+      </script>
+      <div id="toast" class="toast"></div>
+
+</body>
+</html>
