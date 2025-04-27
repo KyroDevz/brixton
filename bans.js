@@ -28,7 +28,6 @@ async function getAvatarURL(userId) {
     return 'https://via.placeholder.com/150'; // fallback avatar
 }
 
-
 // Fetch and render bans
 async function fetchBans() {
     const loadingSpinner = document.getElementById('loadingSpinner');
@@ -45,13 +44,29 @@ async function fetchBans() {
         bansList.innerHTML = '';
 
         for (const ban of bans) {
-            const [reason, userId] = ban.desc.split('|');
+            const [reason, userOrGroup] = ban.desc.split('|');
             const expiry = ban.due ? new Date(ban.due).toLocaleString() : 'Permanent';
             const isPermanent = !ban.due;
 
-            const avatarURL = await getAvatarURL(userId.trim());
-            const proofLink = ban.attachments.length > 0 
-                ? `<a href="${ban.attachments[0].url}" class="proof-link" target="_blank">View Proof</a>` 
+            let cardTitle = '';
+            let cardDescription = '';
+            let avatarURL = '';
+
+            if (userOrGroup.trim().startsWith('Group:')) {
+                // Handle group ban
+                const [groupName, groupId] = userOrGroup.split(':')[1].trim().split('|');
+                cardTitle = `Group: ${groupName.trim()}`;
+                cardDescription = `${reason.trim()} | GroupID: ${groupId.trim()}`;
+            } else {
+                // Handle user ban
+                const userId = userOrGroup.trim();
+                avatarURL = await getAvatarURL(userId);
+                cardTitle = `${ban.name}`;
+                cardDescription = `${reason.trim()} | UserID: ${userId.trim()}`;
+            }
+
+            const proofLink = ban.attachments.length > 0
+                ? `<a href="${ban.attachments[0].url}" class="proof-link" target="_blank">View Proof</a>`
                 : '';
 
             const badge = `<span class="ban-label ${isPermanent ? 'permanent' : 'temporary'}">${isPermanent ? 'Permanent' : 'Temporary'}</span>`;
@@ -60,13 +75,12 @@ async function fetchBans() {
             card.classList.add('ban-card');
             card.innerHTML = `
                 <div class="ban-header" style="text-align: center;">
-                    <img src="${avatarURL}" alt="Avatar" class="ban-avatar" style="border-radius: 50%; width: 100px; height: 100px; object-fit: cover; margin-bottom: 1rem;">
+                    ${avatarURL ? `<img src="${avatarURL}" alt="Avatar" class="ban-avatar" style="border-radius: 50%; width: 100px; height: 100px; object-fit: cover; margin-bottom: 1rem;">` : ''}
                     ${badge}
                 </div>
                 <div class="ban-body" style="margin-top: 1rem;">
-                    <h3>${ban.name}</h3>
-                    <p><strong>Reason:</strong> ${reason.trim()}</p>
-                    <p><strong>User ID:</strong> ${userId.trim()}</p>
+                    <h3>${cardTitle}</h3>
+                    <p><strong>Reason:</strong> ${cardDescription}</p>
                     <p><strong>Expires:</strong> ${expiry}</p>
                     ${proofLink}
                 </div>
@@ -81,7 +95,6 @@ async function fetchBans() {
         console.error('Error fetching bans:', error);
         showToast('Failed to load bans. Please try again!');
     }
-    
 }
 
 // Search functionality
