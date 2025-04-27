@@ -5,11 +5,25 @@ const avatarCache = {}; // Avatar cache
 // Hard-coded group bans
 const hardCodedGroupBans = [
     {
-        groupName: "Liber Studios",
-        groupId: "16339807",
-        reason: "Stealing Assets",
+        groupName: "CoolGroup",
+        groupId: "987654321",
+        reason: "Offensive Content",
         due: null, // Permanent ban
-        groupImage: "https://tr.rbxcdn.com/180DAY-ae2e4d174da8fa332c45f39a9dbaef35/150/150/Image/Webp/noFilter", // Custom image for the group
+        groupImage: "https://example.com/group1.png", // Custom image for the group
+    },
+    {
+        groupName: "BadGroup",
+        groupId: "123456789",
+        reason: "Spamming",
+        due: "2025-05-01T12:00:00Z", // Expiry date
+        groupImage: "https://example.com/group2.png", // Custom image for the group
+    },
+    {
+        groupName: "AnotherGroup",
+        groupId: "111222333",
+        reason: "Harassment",
+        due: "2025-06-01T12:00:00Z", // Expiry date
+        groupImage: "https://example.com/group3.png", // Custom image for the group
     },
 ];
 
@@ -41,6 +55,8 @@ async function getAvatarURL(userId) {
 
 // Fetch and render bans (now with hardcoded group bans)
 async function fetchBans() {
+    console.log("Fetching bans...");
+
     const loadingSpinner = document.getElementById('loadingSpinner');
     const errorMessage = document.getElementById('errorMessage');
     const bansList = document.getElementById('bansList');
@@ -49,15 +65,20 @@ async function fetchBans() {
         loadingSpinner.style.display = 'block';
         errorMessage.textContent = '';
 
-        // Fetch user bans from the API (can remove this if you're not using the API anymore)
+        // Fetch user bans from the API
         const response = await fetch('https://trello-proxy-uhya.onrender.com/bans');
         const bans = await response.json();
 
+        console.log('API Bans:', bans);  // Debug log to see if we fetched the bans correctly
+
         bansList.innerHTML = '';
 
-        // Process both API and hardcoded group bans
+        // Merge API bans and hard-coded group bans
         const allBans = [...bans, ...hardCodedGroupBans];
 
+        console.log('All Bans:', allBans);  // Debug log to ensure both are included
+
+        // Process both API and hardcoded group bans
         for (const ban of allBans) {
             const [reason, userOrGroup] = ban.desc ? ban.desc.split('|') : [ban.reason, `${ban.groupName || ban.userId}`];
             const expiry = ban.due ? new Date(ban.due).toLocaleString() : 'Permanent';
