@@ -9,7 +9,7 @@ const hardCodedGroupBans = [
         groupId: "16339807",
         reason: "Leaking Assets",
         due: null, // Permanent ban
-        groupImage: "https://tr.rbxcdn.com/180DAY-ae2e4d174da8fa332c45f39a9dbaef35/150/150/Image/Webp/noFilter", // Custom image for the group
+        groupImage: "https://tr.rbxcdn.com/180DAY-ae2e4d174da8fa332c45f39a9dbaef35/150/150/Image/Webp/noFilter.png", // Custom image for the group
     },
 ];
 
