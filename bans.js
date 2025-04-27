@@ -5,25 +5,11 @@ const avatarCache = {}; // Avatar cache
 // Hard-coded group bans
 const hardCodedGroupBans = [
     {
-        groupName: "CoolGroup",
-        groupId: "987654321",
-        reason: "Offensive Content",
+        groupName: "Liber Studios",
+        groupId: "16339807",
+        reason: "Leaking Assets",
         due: null, // Permanent ban
-        groupImage: "https://example.com/group1.png", // Custom image for the group
-    },
-    {
-        groupName: "BadGroup",
-        groupId: "123456789",
-        reason: "Spamming",
-        due: "2025-05-01T12:00:00Z", // Expiry date
-        groupImage: "https://example.com/group2.png", // Custom image for the group
-    },
-    {
-        groupName: "AnotherGroup",
-        groupId: "111222333",
-        reason: "Harassment",
-        due: "2025-06-01T12:00:00Z", // Expiry date
-        groupImage: "https://example.com/group3.png", // Custom image for the group
+        groupImage: "https://tr.rbxcdn.com/180DAY-ae2e4d174da8fa332c45f39a9dbaef35/150/150/Image/Webp/noFilter", // Custom image for the group
     },
 ];
 
