@@ -2,7 +2,18 @@ const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
 const avatarCache = {}; // Avatar cache
 
-// Fetch Roblox Avatar
+// Hard-coded group bans
+const hardCodedGroupBans = [
+    {
+        groupName: "Liber Studios",
+        groupId: "16339807",
+        reason: "Stealing Assets",
+        due: null, // Permanent ban
+        groupImage: "https://tr.rbxcdn.com/180DAY-ae2e4d174da8fa332c45f39a9dbaef35/150/150/Image/Webp/noFilter", // Custom image for the group
+    },
+];
+
+// Fetch Roblox Avatar (for user bans)
 async function getAvatarURL(userId) {
     const cacheKey = `avatar_${userId}`;
 
@@ -28,7 +39,7 @@ async function getAvatarURL(userId) {
     return 'https://via.placeholder.com/150'; // fallback avatar
 }
 
-// Fetch and render bans
+// Fetch and render bans (now with hardcoded group bans)
 async function fetchBans() {
     const loadingSpinner = document.getElementById('loadingSpinner');
     const errorMessage = document.getElementById('errorMessage');
@@ -38,13 +49,17 @@ async function fetchBans() {
         loadingSpinner.style.display = 'block';
         errorMessage.textContent = '';
 
+        // Fetch user bans from the API (can remove this if you're not using the API anymore)
         const response = await fetch('https://trello-proxy-uhya.onrender.com/bans');
         const bans = await response.json();
 
         bansList.innerHTML = '';
 
-        for (const ban of bans) {
-            const [reason, userOrGroup] = ban.desc.split('|');
+        // Process both API and hardcoded group bans
+        const allBans = [...bans, ...hardCodedGroupBans];
+
+        for (const ban of allBans) {
+            const [reason, userOrGroup] = ban.desc ? ban.desc.split('|') : [ban.reason, `${ban.groupName || ban.userId}`];
             const expiry = ban.due ? new Date(ban.due).toLocaleString() : 'Permanent';
             const isPermanent = !ban.due;
 
@@ -52,11 +67,11 @@ async function fetchBans() {
             let cardDescription = '';
             let avatarURL = '';
 
-            if (userOrGroup.trim().startsWith('Group:')) {
+            if (ban.groupId) {
                 // Handle group ban
-                const [groupName, groupId] = userOrGroup.split(':')[1].trim().split('|');
-                cardTitle = `Group: ${groupName.trim()}`;
-                cardDescription = `${reason.trim()} | GroupID: ${groupId.trim()}`;
+                cardTitle = `Group: ${ban.groupName}`;
+                cardDescription = `${reason.trim()} | GroupID: ${ban.groupId.trim()}`;
+                avatarURL = ban.groupImage; // Use the provided group image
             } else {
                 // Handle user ban
                 const userId = userOrGroup.trim();
@@ -65,7 +80,7 @@ async function fetchBans() {
                 cardDescription = `${reason.trim()} | UserID: ${userId.trim()}`;
             }
 
-            const proofLink = ban.attachments.length > 0
+            const proofLink = ban.attachments && ban.attachments.length > 0
                 ? `<a href="${ban.attachments[0].url}" class="proof-link" target="_blank">View Proof</a>`
                 : '';
 
@@ -107,7 +122,7 @@ document.getElementById('searchBar').addEventListener('input', function(e) {
     });
 });
 
-// Auto-refresh
+// Auto-refresh functionality (if needed)
 setInterval(fetchBans, REFRESH_INTERVAL);
 fetchBans();
 
